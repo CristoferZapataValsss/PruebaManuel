@@ -10,11 +10,11 @@ const app = express();
 app.use(cors()); 
 app.use(express.json()); 
 
-// Configurar conexión a MySQL (¡cambia estos valores!)
+// conexión a MySQL 
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '', // <--- vacío para XAMPP por defecto
+  password: '', 
   database: 'movie_favorites_db'
 });
 
@@ -27,10 +27,9 @@ db.connect((err) => {
   console.log('✅ Conectado a MySQL');
 });
 
-// Ruta para guardar favoritos
+// guardar favoritos
 app.post('/api/favorites', (req, res) => {
   const { movieId, title, poster_path, overview } = req.body;
-  
   const sql = 'INSERT INTO favorites (movieId, title, poster_path, overview) VALUES (?, ?, ?, ?)';
   db.query(sql, [movieId, title, poster_path, overview], (err, result) => {
     if (err) {
@@ -41,7 +40,7 @@ app.post('/api/favorites', (req, res) => {
   });
 });
 
-// Ruta para obtener favoritos
+// obtener favoritos
 app.get('/api/favorites', (req, res) => {
   db.query('SELECT * FROM favorites', (err, results) => {
     if (err) {
@@ -52,7 +51,7 @@ app.get('/api/favorites', (req, res) => {
   });
 });
 
-// Ruta para eliminar favorito por ID
+// eliminar favorito por ID
 app.delete('/api/favorites/:id', (req, res) => {
   const id = req.params.id;
   db.query('DELETE FROM favorites WHERE id = ?', [id], (err, result) => {

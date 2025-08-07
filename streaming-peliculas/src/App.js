@@ -49,7 +49,7 @@ function App() {
         await addFavorite(movie);
         const updatedFavorites = await getFavorites();
         setFavorites(updatedFavorites);
-        setError(''); // Limpia el error si todo sale bien
+        setError(''); // Limpia el error
         setSuccess(`¡${movie.title} añadida a favoritos!`);
       } catch (error) {
         setError('');//URGENTE!!!!! Agregar "Error al agregar a favoritos" preguntar a copilot porque sucede ese error
