@@ -7,15 +7,15 @@ const cors = require('cors');
 const app = express();
 
 // Configurar middlewares
-app.use(cors());  // Permite peticiones desde el frontend
-app.use(express.json());  // Para parsear JSON
+app.use(cors()); 
+app.use(express.json()); 
 
 // Configurar conexión a MySQL (¡cambia estos valores!)
 const db = mysql.createConnection({
-  host: 'localhost',      // Normalmente es 'localhost'
-  user: 'root',           // Tu usuario de MySQL
-  password: 'password',   // Tu contraseña de MySQL
-  database: 'movie_favorites_db'  // Nombre de la base de datos que creaste
+  host: 'localhost',      
+  user: 'root',           
+  password: 'password',   
+  database: 'movie_favorites_db'  
 });
 
 // Conectar a MySQL

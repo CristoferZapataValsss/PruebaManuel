@@ -22,13 +22,16 @@ function App() {
       try {
         const moviesData = await getPopularMovies(currentPage);
         setMovies(moviesData);
-        console.log('Películas en estado:', moviesData);
-        // Cargar favoritos desde el backend
+      } catch (error) {
+        setError('Error al cargar películas');
+        setMovies([]);
+      }
+      try {
         const savedFavorites = await getFavorites();
         setFavorites(savedFavorites);
       } catch (error) {
-        setError('Error al cargar películas');
-        setMovies([]); // Asegura que no quede vacío sin mensaje
+        setError('Error al cargar favoritos');
+        setFavorites([]);
       } finally {
         setLoading(false);
       }
@@ -54,7 +57,6 @@ function App() {
       setError('¡Esta película ya está en tus favoritos!');
     }
   };
-
   // Eliminar de favoritos
   const handleRemoveFavorite = async (movieId) => {
     try {
@@ -67,10 +69,10 @@ function App() {
       setError('Error al eliminar de favoritos');
     }
   };
-
+console.log('Películas a mostrar:', searchResults.length > 0 ? searchResults : movies);
   return (
-    <div className="App">
-      <h1>Películas Populares</h1>
+    <div class="App">
+      <div id="titulo"><h1>Películas Populares</h1></div>
       
       <form
         onSubmit={async (e) => {
@@ -130,7 +132,6 @@ function App() {
       {loading ? (
         <div className="loader"></div>
       ) : (
-        //**console.log('Películas a mostrar:', searchResults.length > 0 ? searchResults : movies);//*fixear este error con copilot*//
         <>
         
           <div className="movies-grid">
@@ -143,7 +144,7 @@ function App() {
               />
             ))}
           </div>
-
+            
           {searchResults.length === 0 && (
             <div className="pagination">
               <button 
