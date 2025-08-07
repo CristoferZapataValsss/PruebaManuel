@@ -1,23 +1,183 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { getPopularMovies, searchMovies } from './services/tmdb';
+import { getFavorites, addFavorite, removeFavorite } from './services/favorites';
+import MovieCard from './components/MovieCard';
+import FavoriteCard from './components/FavoriteCard';
 import './App.css';
 
 function App() {
+  const [movies, setMovies] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  // Cargar películas y favoritos al iniciar
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const moviesData = await getPopularMovies(currentPage);
+        setMovies(moviesData);
+        console.log('Películas en estado:', moviesData);
+        // Cargar favoritos desde el backend
+        const savedFavorites = await getFavorites();
+        setFavorites(savedFavorites);
+      } catch (error) {
+        setError('Error al cargar películas');
+        setMovies([]); // Asegura que no quede vacío sin mensaje
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [currentPage]);
+
+  // Guardar película en favoritos
+  const handleSaveFavorite = async (movie) => {
+    const isAlreadyFavorite = favorites.some(fav => fav.id === movie.id);
+
+    if (!isAlreadyFavorite) {
+      try {
+        await addFavorite(movie);
+        const updatedFavorites = await getFavorites();
+        setFavorites(updatedFavorites);
+        setError(''); // Limpia el error si todo sale bien
+        setSuccess(`¡${movie.title} añadida a favoritos!`);
+      } catch (error) {
+        setError('Error al guardar en favoritos');
+      }
+    } else {
+      setError('¡Esta película ya está en tus favoritos!');
+    }
+  };
+
+  // Eliminar de favoritos
+  const handleRemoveFavorite = async (movieId) => {
+    try {
+      await removeFavorite(movieId);
+      const updatedFavorites = await getFavorites();
+      setFavorites(updatedFavorites);
+      setError('');
+      setSuccess('Película eliminada de favoritos');
+    } catch (error) {
+      setError('Error al eliminar de favoritos');
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1>Películas Populares</h1>
+      
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (searchTerm.trim() === '') return;
+          setLoading(true);
+          try {
+            const results = await searchMovies(searchTerm);
+            setSearchResults(results);
+            setError('');
+          } catch (error) {
+            setError('Error al buscar películas');
+          } finally {
+            setLoading(false);
+          }
+        }}
+        style={{ marginBottom: '20px' }}
+      >
+        <input
+          type="text"
+          placeholder="Buscar película..."
+          value={searchTerm}
+          onChange={e => {
+            setSearchTerm(e.target.value);
+            setError('');
+          }}
+          style={{ padding: '8px', width: '250px' }}
+        />
+        <button type="submit" style={{ padding: '8px 12px', marginLeft: '8px' }}>
+          Buscar
+        </button>
+        <button
+          type="button"
+          style={{ padding: '8px 12px', marginLeft: '8px' }}
+          onClick={() => {
+            setSearchTerm('');
+            setSearchResults([]);
+            setError('');
+          }}
+          disabled={searchTerm === '' && searchResults.length === 0}
         >
-          Learn React
-        </a>
-      </header>
+          Limpiar
+        </button>
+      </form>
+
+      {error && (
+        <div style={{ color: 'red', marginBottom: '16px', fontWeight: 'bold' }}>
+          {error}
+        </div>
+      )}
+      {success && (
+        <div style={{ color: 'green', marginBottom: '16px', fontWeight: 'bold' }}>
+          {success}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="loader"></div>
+      ) : (
+        //**console.log('Películas a mostrar:', searchResults.length > 0 ? searchResults : movies);//*fixear este error con copilot*//
+        <>
+        
+          <div className="movies-grid">
+            {(searchResults.length > 0 ? searchResults : movies).map(movie => (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                isFavorite={favorites.some(fav => fav.id === movie.id)}
+                onFavoriteClick={handleSaveFavorite}
+              />
+            ))}
+          </div>
+
+          {searchResults.length === 0 && (
+            <div className="pagination">
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </button>
+              <span>Página {currentPage}</span>
+              <button onClick={() => setCurrentPage(p => p + 1)}>
+                Siguiente
+              </button>
+            </div>
+          )}
+
+          {/* Sección de Favoritos */}
+          <div className="favorites-section">
+            <h2>Mis Películas Favoritas ({favorites.length})</h2>
+            {favorites.length > 0 ? (
+              <div className="favorites-grid">
+                {favorites.map(movie => (
+                  <FavoriteCard
+                    key={movie.id}
+                    movie={movie}
+                    onRemove={handleRemoveFavorite}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p>No tienes películas favoritas aún.</p>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
