@@ -5,6 +5,7 @@ import MovieCard from './components/MovieCard';
 import FavoriteCard from './components/FavoriteCard';
 import './App.css';
 
+
 function App() {
   const [movies, setMovies] = useState([]);
   const [favorites, setFavorites] = useState([]);

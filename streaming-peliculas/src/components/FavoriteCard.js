@@ -1,5 +1,7 @@
 import React from 'react';
 
+const API_URL = 'http://localhost:5000/api/favorites';
+
 function FavoriteCard({ movie, onRemove }) {
   return (
     <div className="favorite-card">

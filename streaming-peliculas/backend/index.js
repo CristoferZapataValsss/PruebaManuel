@@ -12,10 +12,10 @@ app.use(express.json());
 
 // Configurar conexión a MySQL (¡cambia estos valores!)
 const db = mysql.createConnection({
-  host: 'localhost',      
-  user: 'root',           
-  password: 'password',   
-  database: 'movie_favorites_db'  
+  host: 'localhost',
+  user: 'root',
+  password: '', // <--- vacío para XAMPP por defecto
+  database: 'movie_favorites_db'
 });
 
 // Conectar a MySQL
@@ -49,6 +49,18 @@ app.get('/api/favorites', (req, res) => {
       return res.status(500).json({ error: 'Error al cargar favoritos' });
     }
     res.json(results);
+  });
+});
+
+// Ruta para eliminar favorito por ID
+app.delete('/api/favorites/:id', (req, res) => {
+  const id = req.params.id;
+  db.query('DELETE FROM favorites WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error('Error al eliminar favorito:', err);
+      return res.status(500).json({ error: 'No se pudo eliminar el favorito' });
+    }
+    res.json({ success: true });
   });
 });
 

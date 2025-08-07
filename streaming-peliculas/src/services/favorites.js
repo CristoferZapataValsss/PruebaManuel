@@ -1,18 +1,22 @@
-import axios from 'axios';
+const API_URL = 'http://localhost:5000/api/favorites';
 
-const API_URL = 'http://localhost:3001/api/favorites'; // Cambia el puerto si tu backend usa otro
+export async function getFavorites() {
+  const res = await fetch(API_URL);
+  return res.json();
+}
 
-export const getFavorites = async () => {
-  const response = await axios.get(API_URL);
-  return response.data;
-};
+export async function addFavorite(movie) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(movie),
+  });
+  return res.json();
+}
 
-export const addFavorite = async (movie) => {
-  const response = await axios.post(API_URL, movie);
-  return response.data;
-};
-
-export const removeFavorite = async (movieId) => {
-  const response = await axios.delete(`${API_URL}/${movieId}`);
-  return response.data;
-};
+export async function removeFavorite(id) {
+  const res = await fetch(`${API_URL}/${id}`, {
+    method: 'DELETE',
+  });
+  return res.json();
+}
