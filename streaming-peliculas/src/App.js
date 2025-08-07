@@ -31,7 +31,7 @@ function App() {
         const savedFavorites = await getFavorites();
         setFavorites(savedFavorites);
       } catch (error) {
-        setError('Error al cargar favoritos');
+        setError('');
         setFavorites([]);
       } finally {
         setLoading(false);
@@ -52,7 +52,7 @@ function App() {
         setError(''); // Limpia el error si todo sale bien
         setSuccess(`¡${movie.title} añadida a favoritos!`);
       } catch (error) {
-        setError('Error al guardar en favoritos');
+        setError('');//URGENTE!!!!! Agregar "Error al agregar a favoritos" preguntar a copilot porque sucede ese error
       }
     } else {
       setError('¡Esta película ya está en tus favoritos!');
@@ -70,11 +70,11 @@ function App() {
       setError('Error al eliminar de favoritos');
     }
   };
-console.log('Películas a mostrar:', searchResults.length > 0 ? searchResults : movies);
   return (
     <div class="App">
-      <div id="titulo"><h1>Películas Populares</h1></div>
-      
+      <header>
+        <h1>Streaming Películas</h1>
+      </header>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -92,7 +92,7 @@ console.log('Películas a mostrar:', searchResults.length > 0 ? searchResults : 
         }}
         style={{ marginBottom: '20px' }}
       >
-        <input
+        <input 
           type="text"
           placeholder="Buscar película..."
           value={searchTerm}
@@ -100,14 +100,17 @@ console.log('Películas a mostrar:', searchResults.length > 0 ? searchResults : 
             setSearchTerm(e.target.value);
             setError('');
           }}
-          style={{ padding: '8px', width: '250px' }}
+          style={{ padding: '8px', width: '250px', borderRadius: '4px', border: '2px solid #ccc' }}
         />
-        <button type="submit" style={{ padding: '8px 12px', marginLeft: '8px' }}>
+        <button type="submit" style={{ padding: '8px 12px', marginLeft: '8px' }} 
+        disabled={searchTerm === '' && searchResults.length === 0}
+        >
           Buscar
         </button>
+
         <button
           type="button"
-          style={{ padding: '8px 12px', marginLeft: '8px' }}
+          style={{ padding: '8px 12px', marginLeft: '8px'}}
           onClick={() => {
             setSearchTerm('');
             setSearchResults([]);
@@ -163,7 +166,7 @@ console.log('Películas a mostrar:', searchResults.length > 0 ? searchResults : 
 
           {/* Sección de Favoritos */}
           <div className="favorites-section">
-            <h2>Mis Películas Favoritas ({favorites.length})</h2>
+            <h2 style={{color:'white'}}>Mis Películas Favoritas ({favorites.length})</h2>
             {favorites.length > 0 ? (
               <div className="favorites-grid">
                 {favorites.map(movie => (
@@ -183,5 +186,4 @@ console.log('Películas a mostrar:', searchResults.length > 0 ? searchResults : 
     </div>
   );
 }
-
 export default App;
