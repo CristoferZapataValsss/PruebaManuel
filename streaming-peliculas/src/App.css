@@ -1,4 +1,4 @@
-/* ============ VARIABLES GLOBALES ============ */
+/*  VARIABLES GLOBALES  */
 :root {
   --primary: #ff6b6b;
   --primary-hover: #ff5252;
@@ -14,7 +14,7 @@
   --transition: all 0.3s ease;
 }
 
-/* ============ ESTILOS BASE ============ */
+/* ESTILOS BASE  */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
@@ -33,7 +33,7 @@ body {
   justify-content:center;  
 }
 
-/* ============ COMPONENTES PRINCIPALES ============ */
+/* COMPONENTES PRINCIPALES  */
 #titulo{
   color: white;
   text-align: left;
@@ -54,7 +54,7 @@ header h1 {
   letter-spacing: -0.5px;
 }
 
-/* ============ TARJETAS DE PELÍCULAS ============ */
+/* TARJETAS DE PELÍCULAS  */
 .movies-container {
   display: flex;
   flex-direction: column;
@@ -124,7 +124,7 @@ header h1 {
   overflow: hidden;
 }
 
-/* ============ BOTONES ============ */
+/*  BOTONES  */
 .btn {
   border: none;
   padding: 10px 15px;
@@ -159,7 +159,7 @@ header h1 {
   font-size: 0.85rem;
 }
 
-/* ============ PAGINACIÓN ============ */
+/*  PAGINACIÓN  */
 .pagination {
   display: flex;
   justify-content: center;
@@ -183,7 +183,7 @@ header h1 {
   text-align: center;
 }
 
-/* ============ SECCIÓN DE FAVORITOS ============ */
+/*  SECCIÓN DE FAVORITOS  */
 .favorites-section {
   margin-top: 50px;
   padding-top: 30px;
@@ -257,7 +257,7 @@ header h1 {
   color: white;
 }
 
-/* ============ ESTADOS ============ */
+/* ESTADOS  */
 .loading {
   text-align: center;
   font-size: 1.2rem;
@@ -272,7 +272,7 @@ header h1 {
   font-style: italic;
 }
 
-/* ============ CARGANDO ============ */
+/*  CARGANDO  */
 .loader {
   border: 8px solid #f3f3f3;
   border-top: 8px solid #3498db;
@@ -288,7 +288,7 @@ header h1 {
   100% { transform: rotate(360deg); }
 }
 
-/* ============ RESPONSIVE ============ */
+/*  RESPONSIVE  */
 @media (max-width: 768px) {
   .movies-container {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
