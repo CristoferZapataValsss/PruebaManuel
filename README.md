@@ -1,6 +1,6 @@
 # Streaming de Películas
 
-Proyecto de prototipo para una plataforma de streaming de películas con favoritos, usando React, Node.js y MySQL.
+Proyecto de prototipo para una plataforma de streaming de películas usando React, Node.js y MySQL.
 
 ---
 
@@ -103,7 +103,9 @@ node index.js
 
 ### 2. Inicia el frontend
 
-```npm start
+```
+npm start
+
 ```
 El frontend estará disponible en [http://localhost:3000]
 
