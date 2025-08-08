@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 
 // Configurar middlewares
-app.use(cors()); 
+app.use(cors());
 app.use(express.json()); 
 
 // conexión a MySQL 
