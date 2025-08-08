@@ -148,7 +148,7 @@ function App() {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                isFavorite={favorites.some(fav => fav.movieId === movie.id)} // <-- CAMBIO CORRECTO
+                isFavorite={favorites.some(fav => fav.movieId === movie.id)}
                 onFavoriteClick={handleSaveFavorite}
               />
             ))}
