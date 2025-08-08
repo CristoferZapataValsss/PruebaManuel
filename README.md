@@ -103,7 +103,9 @@ node index.js
 
 ### 2. Inicia el frontend
 
-```npm start
+```
+npm start
+
 ```
 El frontend estará disponible en [http://localhost:3000]
 
