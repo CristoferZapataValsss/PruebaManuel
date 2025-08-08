@@ -42,17 +42,22 @@ function App() {
 
   // Guardar película en favoritos
   const handleSaveFavorite = async (movie) => {
-    const isAlreadyFavorite = favorites.some(fav => fav.id === movie.id);
+    const isAlreadyFavorite = favorites.some(fav => fav.movieId === movie.id);
 
     if (!isAlreadyFavorite) {
       try {
-        await addFavorite(movie);
+        await addFavorite({
+          movieId: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+          overview: movie.overview
+        });
         const updatedFavorites = await getFavorites();
         setFavorites(updatedFavorites);
-        setError(''); // Limpia el error
+        setError('');
         setSuccess(`¡${movie.title} añadida a favoritos!`);
       } catch (error) {
-        setError('');//URGENTE!!!!! Agregar "Error al agregar a favoritos" preguntar a copilot porque sucede ese error
+        setError('Error al agregar a favoritos');
       }
     } else {
       setError('¡Esta película ya está en tus favoritos!');
@@ -143,7 +148,7 @@ function App() {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                isFavorite={favorites.some(fav => fav.id === movie.id)}
+                isFavorite={favorites.some(fav => fav.movieId === movie.id)} // <-- CAMBIO CORRECTO
                 onFavoriteClick={handleSaveFavorite}
               />
             ))}
@@ -169,10 +174,10 @@ function App() {
             <h2 style={{color:'white'}}>Mis Películas Favoritas ({favorites.length})</h2>
             {favorites.length > 0 ? (
               <div className="favorites-grid">
-                {favorites.map(movie => (
+                {favorites.map(fav => (
                   <FavoriteCard
-                    key={movie.id}
-                    movie={movie}
+                    key={fav.id}
+                    movie={fav}
                     onRemove={handleRemoveFavorite}
                   />
                 ))}
